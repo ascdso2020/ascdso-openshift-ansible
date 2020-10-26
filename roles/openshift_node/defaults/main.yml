@@ -6,13 +6,14 @@ openshift_node_tls_verify: false
 openshift_node_kubeconfig_path: "{{ openshift_kubeconfig_path | default('~/.kube/config') | expanduser | realpath }}"
 openshift_node_kubeconfig: "{{ lookup('file', openshift_node_kubeconfig_path) | from_yaml }}"
 openshift_node_bootstrap_port: 22623
-openshift_node_bootstrap_server: "{{ openshift_node_kubeconfig.clusters.0.cluster.server.split(':')[0:-1] | join(':') }}:{{ openshift_node_bootstrap_port }}"
+openshift_node_bootstrap_server: "{{ openshift_node_kubeconfig.clusters.0.cluster.server.split(':')[0:-1] | join(':') | regex_replace('://api', '://api-int') }}:{{ openshift_node_bootstrap_port }}"
 openshift_node_bootstrap_endpoint: "{{ openshift_node_bootstrap_server }}/config/{{ openshift_node_machineconfigpool }}"
 
 openshift_node_packages:
   - cri-o-{{ l_kubernetes_version }}.*
-  - openshift-clients-{{ l_cluster_version }}.*
-  - openshift-hyperkube-{{ l_cluster_version }}.*
+  - openshift-clients-{{ l_cluster_version }}*
+  - openshift-hyperkube-{{ l_cluster_version }}*
+  - podman
 
 openshift_node_support_packages: "{{ openshift_node_support_packages_base + openshift_node_support_packages_by_arch[ansible_architecture] }}"
 
@@ -36,7 +37,6 @@ openshift_node_support_packages_base:
   #- shim
   - openssh-server
   - openssh-clients
-  - podman
   - skopeo
   - runc
   - containernetworking-plugins
@@ -45,6 +45,7 @@ openshift_node_support_packages_base:
   #- toolbox
   - nfs-utils
   - NetworkManager
+  - NetworkManager-ovs
   - dnsmasq
   - lvm2
   - iscsi-initiator-utils
@@ -75,6 +76,7 @@ openshift_node_support_packages_base:
   - bash-completion
   - vim-minimal
   - nano
+  - openvswitch2.13
   #- openshift-hyperkube
   #- openshift-clients
   #- pivot
@@ -89,6 +91,7 @@ openshift_node_support_packages_base:
   - container-storage-setup
   #- cloud-utils-growpart
   - ceph-common
+  - cifs-utils
 
 openshift_node_support_packages_by_arch:
   ppc64le:

@@ -15,7 +15,7 @@ Installation of OpenShift 4.x uses a command-line installation wizard instead of
 Ansible playbooks.  Learn more about the OpenShift Installer in this
 [overview](https://github.com/openshift/installer/blob/master/docs/user/overview.md#installer-overview).
 
-For OpenShift 4.x, this repo only provides playbooks necessary for scaling up or
+For OpenShift 4.x, this repository only provides playbooks necessary for scaling up or
 upgrading RHEL hosts in an existing 4.x cluster.
 
 The [master branch](https://github.com/openshift/openshift-ansible/tree/master)
@@ -23,7 +23,7 @@ tracks our current work **in development**.
 
 Requirements: (localhost)
 
-- Ansible >= 2.9.1
+- Ansible >= 2.9.5
 - OpenShift Client (oc)
 
 # Quickstart
